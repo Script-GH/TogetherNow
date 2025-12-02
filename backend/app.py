@@ -1,5 +1,9 @@
 import os
 import json
+from dotenv import load_dotenv
+
+load_dotenv() # Load environment variables from .env file
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import firebase_admin
@@ -37,12 +41,22 @@ def verify_token(req):
 RECAPTCHA_SECRET = os.environ.get("RECAPTCHA_SECRET")
 
 def verify_recaptcha(token):
-    if not token: return False
+    if not token:
+        print("DEBUG: No CAPTCHA token provided")
+        return False
+    
+    if not RECAPTCHA_SECRET:
+        print("DEBUG: RECAPTCHA_SECRET is missing! Make sure to set the environment variable.")
+        return False
+
     payload = {'secret': RECAPTCHA_SECRET, 'response': token}
     try:
         r = requests.post("https://www.google.com/recaptcha/api/siteverify", data=payload)
-        return r.json().get("success", False)
-    except:
+        result = r.json()
+        print(f"DEBUG: Recaptcha verification result: {result}")
+        return result.get("success", False)
+    except Exception as e:
+        print(f"DEBUG: Recaptcha request failed: {e}")
         return False
 
 @app.route('/auth/signup', methods=['POST'])
