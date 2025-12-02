@@ -1,4 +1,4 @@
-# Veda Project
+# TogetherNow
 
 ## Description
 This project is a web application with a Python Flask backend and a static HTML frontend.
