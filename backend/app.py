@@ -30,7 +30,7 @@ def verify_token(req):
         return None
 
 # --- AUTH ROUTES ---
-RECAPTCHA_SECRET = "6Lf4FB4sAAAAABraXRIL7uW4OpIErfiy4T9h2NRG" # TEST SECRET KEY
+RECAPTCHA_SECRET = os.environ.get("RECAPTCHA_SECRET")
 
 def verify_recaptcha(token):
     if not token: return False
@@ -77,7 +77,7 @@ def login():
 
     try:
 
-        API_KEY = "AIzaSyCbGLFee7HHCLsrqWFl_KZTqqIkpDx8x3A"
+        API_KEY = os.environ.get("FIREBASE_API_KEY")
         verify_password_url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={API_KEY}"
         payload = {"email": email, "password": password, "returnSecureToken": True}
         res = requests.post(verify_password_url, json=payload)
